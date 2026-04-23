@@ -1,0 +1,151 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --font-inter: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+:root {
+  /* Premium Light Theme Variables (Zinc/Slate influence) */
+  --bg-deep: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --text-main: #0f172a;
+  --text-muted: #334155;
+  --text-dim: #64748b;
+  --primary: #2563eb;
+  --accent: #0ea5e9;
+  --border-color: rgba(15, 23, 42, 0.08);
+  --gradient-from: #2563eb;
+  --gradient-to: #7c3aed;
+
+  --primary-glow: rgba(37, 99, 235, 0.1);
+  --accent-glow: rgba(14, 165, 233, 0.05);
+  --scanline-color: rgba(0, 0, 0, 0.01);
+}
+
+.dark {
+  /* Deep Technical Dark Theme Variables */
+  --bg-deep: #030303;
+  --bg-glass: rgba(0, 0, 0, 0.7);
+  --text-main: #f9fafb;
+  /* --text-muted: #d1d5db;
+  --text-dim: #9ca3af; */
+  --primary: #3b82f6;
+  --accent: #00f2ff;
+  --border-color: rgba(255, 255, 255, 0.08);
+  /* --gradient-from: #3b82f6;
+  --gradient-to: #8b5cf6;
+
+  --primary-glow: rgba(59, 130, 246, 0.2);
+  --accent-glow: rgba(0, 242, 255, 0.1); */
+  /* --scanline-color: rgba(255, 255, 255, 0.02); */
+}
+
+@layer base {
+  body {
+    @apply transition-colors duration-500 font-inter antialiased selection:bg-primary/30;
+    background-color: var(--bg-deep);
+    color: var(--text-muted);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--scanline-color) 1px, transparent 1px);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 99;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply transition-colors duration-500 font-bold tracking-tight;
+    color: var(--text-main);
+  }
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-xl border transition-all duration-300 rounded-2xl;
+    background-color: var(--bg-glass);
+    border-color: var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .dark .glass {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  }
+
+  .glass-hover {
+    @apply hover:border-primary/20 hover:shadow-2xl transition-all duration-300;
+  }
+
+  .gradient-text {
+    background-image: linear-gradient(to bottom right, var(--gradient-from), var(--gradient-to));
+    @apply bg-clip-text text-transparent transition-all duration-500;
+    filter: drop-shadow(0 0 15px var(--primary-glow));
+  }
+
+  .badge-elite {
+    @apply px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-mono border transition-all duration-300;
+    border-color: var(--border-color);
+    background-color: var(--bg-glass);
+    color: var(--primary);
+  }
+
+  .btn-primary {
+    @apply px-8 py-3 bg-primary text-white rounded-lg font-bold hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary/20;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-3 border rounded-lg font-bold transition-all;
+    background-color: var(--bg-glass);
+    border-color: var(--border-color);
+    color: var(--text-main);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-300 dark:bg-zinc-800 rounded-full border-2 transition-colors;
+  border-color: var(--bg-deep);
+}
+
+.mesh-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 0% 0%, var(--primary-glow) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, var(--accent-glow) 0%, transparent 50%);
+  pointer-events: none;
+}
