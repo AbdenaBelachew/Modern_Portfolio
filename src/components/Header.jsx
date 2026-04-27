@@ -2,15 +2,16 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Activity, Zap, Terminal } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
+import resumePdf from '../assets/dotnet.pdf';
 
 const Header = () => {
   const navItems = [
-    { label: 'Manifesto', href: '#about' },
+    { label: 'About', href: '#about' },
     { label: 'Matrix', href: '#matrix' },
     { label: 'Projects', href: '#projects' },
     { label: 'Architecture', href: '#architecture' },
     { label: 'Milestones', href: '#experience' },
-    { label: 'Inquiry', href: '#contact' }
+    { label: 'Contact', href: '#contact' }
   ];
 
   return (
@@ -21,7 +22,7 @@ const Header = () => {
     >
       <div className="flex items-center gap-6 cursor-pointer group">
         <span className="text-xl font-bold tracking-tighter text-[var(--text-main)] uppercase">
-          Abdena<span className="text-primary">.dev</span>
+          Abdena <span className="text-primary">Belachew</span>
         </span>
 
 
@@ -42,7 +43,8 @@ const Header = () => {
       <div className="flex items-center gap-6">
         <ThemeToggle />
         <a
-          href="/assets/resume.pdf"
+          href={resumePdf}
+          download="dotnet.pdf"
           className="hidden sm:block text-[10px] font-mono font-black text-[var(--text-dim)] hover:text-primary transition-all tracking-[0.2em] uppercase"
         >
           Resume

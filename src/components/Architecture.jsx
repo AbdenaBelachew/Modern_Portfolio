@@ -40,7 +40,7 @@ const Architecture = () => {
             <span className="gradient-text">Scalability & Trust.</span>
           </h2>
           <p className="text-[var(--text-muted)] text-lg leading-relaxed max-w-2xl mx-auto font-semibold">
-            Beyond coding, I focus on the structural integrity of the entire enterprise ecosystem. 
+            Beyond coding, I focus on the structural integrity of the entire enterprise ecosystem.
             From Stock Management backends to secure Digital Archives, every layer is architected for maximum durability.
           </p>
         </div>
@@ -66,46 +66,46 @@ const Architecture = () => {
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 mb-24">
-            <div className="glass p-12 border-[var(--border-color)] group hover:bg-primary/5 transition-all">
-                <div className="flex items-center gap-3 mb-8">
-                    <Zap size={20} className="text-primary" />
-                    <h3 className="text-xl font-black text-[var(--text-main)] tracking-tight">Ecosystem Architecture</h3>
-                </div>
-                <div className="space-y-6">
-                    <div className="p-6 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5">
-                        <div className="text-sm font-black text-[var(--text-dim)] mb-2 uppercase tracking-widest text-[11px]">Legacy State</div>
-                        <p className="text-[var(--text-dim)] text-sm leading-relaxed font-bold">Tight coupling, single point of failure, and slow manual background processing.</p>
-                    </div>
-                    <div className="p-6 bg-primary/10 rounded-xl border border-primary/20">
-                        <div className="text-sm font-black text-primary mb-2 uppercase tracking-widest text-[11px]">Enterprise Optimized</div>
-                        <p className="text-[var(--text-muted)] dark:text-zinc-300 text-sm leading-relaxed font-black">Fault isolation, tech-stack flexibility, and sub-MS query performance geared for high-availability corporate environments.</p>
-                    </div>
-                </div>
+        <div className="grid lg:grid-cols-2 gap-8 mb-12">
+          <div className="glass p-12 border-[var(--border-color)] group hover:bg-primary/5 transition-all">
+            <div className="flex items-center gap-3 mb-8">
+              <Zap size={20} className="text-primary" />
+              <h3 className="text-xl font-black text-[var(--text-main)] tracking-tight">Ecosystem Architecture</h3>
             </div>
+            <div className="space-y-6">
+              <div className="p-6 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5">
+                <div className="text-sm font-black text-[var(--text-dim)] mb-2 uppercase tracking-widest text-[11px]">Legacy State</div>
+                <p className="text-[var(--text-dim)] text-sm leading-relaxed font-bold">Tight coupling, single point of failure, and slow manual background processing.</p>
+              </div>
+              <div className="p-6 bg-primary/10 rounded-xl border border-primary/20">
+                <div className="text-sm font-black text-primary mb-2 uppercase tracking-widest text-[11px]">Enterprise Optimized</div>
+                <p className="text-[var(--text-muted)] dark:text-zinc-300 text-sm leading-relaxed font-black">Fault isolation, tech-stack flexibility, and sub-MS query performance geared for high-availability corporate environments.</p>
+              </div>
+            </div>
+          </div>
 
-            <div className="glass p-12 border-[var(--border-color)] group hover:bg-primary/5 transition-all">
-                <div className="flex items-center gap-3 mb-8">
-                    <Layers size={20} className="text-primary" />
-                    <h3 className="text-xl font-black text-[var(--text-main)] tracking-tight">Structured Domain Layers</h3>
-                </div>
-                <div className="relative pl-8 border-l-2 border-slate-200 dark:border-white/10 space-y-8">
-                    {[
-                        { label: "Core Domain Layer", desc: "Pure business logic (Stock, Pharmacy rules). Zero external dependencies.", color: "bg-blue-500" },
-                        { label: "Infrastructure Layer", desc: "External concerns: SQL Server, Identity Providers, File Systems.", color: "bg-cyan-500" },
-                        { label: "Presentation Layer", desc: "High-density React/Blazor dashboards for real-time operations overhead.", color: "bg-indigo-500" }
-                    ].map((layer, i) => (
-                        <div key={i} className="relative">
-                            <div className={`absolute left-[-37px] top-1.5 w-4 h-4 rounded-full ${layer.color} border-4 border-[var(--bg-deep)] shadow-sm`} />
-                            <div className="text-sm font-black text-[var(--text-main)] mb-1 tracking-tight uppercase">{layer.label}</div>
-                            <p className="text-[var(--text-dim)] text-xs leading-relaxed font-bold">{layer.desc}</p>
-                        </div>
-                    ))}
-                </div>
+          <div className="glass p-12 border-[var(--border-color)] group hover:bg-primary/5 transition-all">
+            <div className="flex items-center gap-3 mb-8">
+              <Layers size={20} className="text-primary" />
+              <h3 className="text-xl font-black text-[var(--text-main)] tracking-tight">Structured Domain Layers</h3>
             </div>
+            <div className="relative pl-8 border-l-2 border-slate-200 dark:border-white/10 space-y-8">
+              {[
+                { label: "Core Domain Layer", desc: "Pure business logic (Stock, Pharmacy rules). Zero external dependencies.", color: "bg-blue-500" },
+                { label: "Infrastructure Layer", desc: "External concerns: SQL Server, Identity Providers, File Systems.", color: "bg-cyan-500" },
+                { label: "Presentation Layer", desc: "High-density React/Blazor dashboards for real-time operations overhead.", color: "bg-indigo-500" }
+              ].map((layer, i) => (
+                <div key={i} className="relative">
+                  <div className={`absolute left-[-37px] top-1.5 w-4 h-4 rounded-full ${layer.color} border-4 border-[var(--bg-deep)] shadow-sm`} />
+                  <div className="text-sm font-black text-[var(--text-main)] mb-1 tracking-tight uppercase">{layer.label}</div>
+                  <p className="text-[var(--text-dim)] text-xs leading-relaxed font-bold">{layer.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="glass p-1 lg:p-2 overflow-hidden border-[var(--border-color)]">
+        {/* <div className="glass p-1 lg:p-2 overflow-hidden border-[var(--border-color)]">
             <div className="bg-transparent rounded-2xl p-12 lg:p-24 overflow-hidden relative border border-[var(--border-color)] shadow-inner">
                 <div className="flex flex-col items-center justify-center relative z-10">
                     <div className="mb-12 flex flex-col items-center">
@@ -154,7 +154,7 @@ const Architecture = () => {
                 
                 <div className="absolute inset-0 opacity-[0.1] dark:opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(var(--primary) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
             </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

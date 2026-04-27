@@ -124,7 +124,7 @@ const Contact = () => {
                   <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <label className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-widest font-black flex items-center gap-2">
-                        <User size={12} className="text-primary opacity-60" /> Full_Name
+                        <User size={12} className="text-primary opacity-60" /> FullName
                       </label>
                       <input
                         required
@@ -137,7 +137,7 @@ const Contact = () => {
                     </div>
                     <div className="space-y-3">
                       <label className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-widest font-black flex items-center gap-2">
-                        <Building2 size={12} className="text-primary opacity-60" /> Corp_Email
+                        <Building2 size={12} className="text-primary opacity-60" /> Email
                       </label>
                       <input
                         required

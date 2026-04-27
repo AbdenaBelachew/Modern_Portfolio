@@ -173,6 +173,7 @@ const ManagerStudio = () => {
   const [setupMode, setSetupMode] = useState(false);
   const [serviceKey, setServiceKey] = useState('');
   const [settingUp, setSettingUp] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     fetchProjects();
@@ -295,22 +296,49 @@ const ManagerStudio = () => {
   );
 
   return (
-    <div className="h-screen bg-white dark:bg-zinc-950 flex overflow-hidden font-inter transition-colors duration-500">
+    <div className="h-screen bg-white dark:bg-zinc-950 flex flex-col md:flex-row overflow-hidden font-inter transition-colors duration-500">
       
+      {/* Mobile Header */}
+      <div className="md:hidden flex items-center justify-between p-4 border-b border-zinc-100 dark:border-white/5 bg-white dark:bg-zinc-950 z-30 shrink-0">
+          <div className="flex items-center gap-3">
+             <div className="p-2 bg-primary/10 text-primary rounded-xl"><Package size={20} /></div>
+             <h1 className="text-xl font-black tracking-tight">Studio</h1>
+          </div>
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2.5 text-zinc-900 dark:text-white bg-zinc-100 dark:bg-white/10 rounded-xl"
+          >
+             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+      </div>
+
       {/* Sidebar: Project Navigator */}
-      <aside className="w-[380px] flex flex-col border-r border-zinc-100 dark:border-white/5 bg-white dark:bg-zinc-950 z-20">
-        <header className="p-8 space-y-6">
+      <aside className={`
+        fixed md:static inset-y-0 left-0 w-full sm:w-[380px] md:w-[380px] flex flex-col border-r border-zinc-100 dark:border-white/5 bg-white dark:bg-zinc-950 z-40
+        transform transition-transform duration-300 ease-in-out md:transform-none
+        ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
+        <header className="p-6 md:p-8 space-y-6">
            <div className="flex items-center justify-between">
               <h1 className="text-xl font-black tracking-tight flex items-center gap-2">
-                 <div className="p-2 bg-primary/10 text-primary rounded-xl"><Package size={20} /></div>
-                 Manager Studio
+                 <div className="p-2 bg-primary/10 text-primary rounded-xl hidden md:flex"><Package size={20} /></div>
+                 <span className="hidden md:inline">Manager Studio</span>
+                 <span className="md:hidden">Projects</span>
               </h1>
-              <button 
-                onClick={() => navigate('/admin/dashboard')}
-                className="p-2.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all"
-              >
-                 <LogOut size={20} />
-              </button>
+              <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => navigate('/admin/dashboard')}
+                    className="p-2.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all"
+                  >
+                     <LogOut size={20} />
+                  </button>
+                  <button 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="md:hidden p-2.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all"
+                  >
+                     <X size={20} />
+                  </button>
+              </div>
            </div>
            
            <div className="relative group">
@@ -326,7 +354,7 @@ const ManagerStudio = () => {
 
         <div className="flex-1 overflow-y-auto px-4 custom-scrollbar pb-10">
            <button 
-             onClick={() => setSelectedId(null)}
+             onClick={() => { setSelectedId(null); setMobileMenuOpen(false); }}
              className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all mb-4 border-2 border-dashed
                ${!selectedId ? 'border-primary bg-primary/5 text-primary' : 'border-zinc-100 dark:border-white/5 text-zinc-400 hover:bg-zinc-50 dark:hover:bg-white/5'}
              `}
@@ -339,7 +367,7 @@ const ManagerStudio = () => {
               {filteredProjects.map(p => (
                 <div 
                   key={p.id}
-                  onClick={() => setSelectedId(p.id)}
+                  onClick={() => { setSelectedId(p.id); setMobileMenuOpen(false); }}
                   className={`group flex items-center gap-4 p-4 rounded-2xl cursor-pointer transition-all relative overflow-hidden
                     ${selectedId === p.id ? 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 shadow-xl shadow-zinc-900/10' : 'hover:bg-zinc-50 dark:hover:bg-white/5'}
                   `}
@@ -365,17 +393,17 @@ const ManagerStudio = () => {
 
       {/* Main Area: Simple Refined Editor */}
       <main className="flex-1 overflow-y-auto bg-zinc-50/50 dark:bg-black/20 custom-scrollbar">
-        <div className="max-w-4xl mx-auto py-20 px-10 space-y-20">
+        <div className="max-w-4xl mx-auto py-8 md:py-20 px-4 md:px-10 space-y-12 md:space-y-20">
            
-           <header className="flex justify-between items-end">
+           <header className="flex flex-col md:flex-row md:justify-between md:items-end gap-6">
               <div className="space-y-2">
-                 <span className="text-[12px] font-black tracking-[0.4em] text-primary uppercase">{selectedId ? 'Edit_Project' : 'Genesis_Mode'}</span>
-                 <h2 className="text-4xl font-black tracking-tight">{selectedId ? formData.title : 'Uninitialized Node'}</h2>
+                 <span className="text-[10px] md:text-[12px] font-black tracking-[0.4em] text-primary uppercase">{selectedId ? 'Edit_Project' : 'Genesis_Mode'}</span>
+                 <h2 className="text-3xl md:text-4xl font-black tracking-tight">{selectedId ? (formData.title || 'Untitled') : 'Uninitialized Node'}</h2>
               </div>
               <button 
                 onClick={handleSave}
                 disabled={saving}
-                className="px-10 py-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-2xl text-[12px] font-black uppercase tracking-widest shadow-2xl transition-all hover:scale-[1.03] active:scale-[0.97] flex items-center gap-3"
+                className="w-full md:w-auto px-8 md:px-10 py-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-2xl text-[12px] font-black uppercase tracking-widest shadow-2xl transition-all hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-3"
               >
                  {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                  {saving ? 'Syncing...' : 'Sync Changes'}
@@ -417,7 +445,7 @@ const ManagerStudio = () => {
            </div>
 
            {/* Narrative Flow */}
-           <div className="space-y-10 p-10 bg-white dark:bg-zinc-900/40 rounded-[40px] border border-zinc-100 dark:border-white/5 shadow-sm">
+           <div className="space-y-8 md:space-y-10 p-6 md:p-10 bg-white dark:bg-zinc-900/40 rounded-[30px] md:rounded-[40px] border border-zinc-100 dark:border-white/5 shadow-sm">
               <div className="space-y-3">
                 <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
                    <ChevronRight size={14} className="text-primary" /> Brief_Mission_Statement
@@ -443,7 +471,7 @@ const ManagerStudio = () => {
            </div>
 
            {/* Performance & Tech Stack */}
-           <div className="grid grid-cols-2 gap-10">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="space-y-6">
                  <div className="flex items-center justify-between px-2">
                     <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Ecosystem</span>
@@ -480,8 +508,8 @@ const ManagerStudio = () => {
            </div>
 
            {/* Gallery Hub */}
-           <div className="space-y-8 bg-zinc-900 text-white p-10 rounded-[50px] shadow-2xl">
-              <div className="flex items-center justify-between">
+           <div className="space-y-8 bg-zinc-900 text-white p-6 md:p-10 rounded-[30px] md:rounded-[50px] shadow-2xl">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                  <div className="space-y-1">
                     <h3 className="text-xl font-bold tracking-tight flex items-center gap-4">
                        Gallery Artifact Vault <Layout size={20} className="text-primary" />
@@ -490,7 +518,7 @@ const ManagerStudio = () => {
                  </div>
                  <button 
                   onClick={() => updateArray('gallery_images', -1)}
-                  className="p-4 bg-primary text-white rounded-2xl hover:scale-105 transition-all"
+                  className="w-full md:w-auto p-4 bg-primary text-white rounded-2xl hover:scale-105 transition-all flex items-center justify-center"
                 >
                     <Plus size={24} />
                  </button>
