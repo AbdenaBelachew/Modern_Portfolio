@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, Loader2, Database, Shield, Zap, X, ChevronRight, Layout } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 
 const Projects = () => {
   const [projects, setProjects] = useState([
@@ -63,86 +62,35 @@ const Projects = () => {
       image_url: null
     }
   ]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [isLiveSync, setIsLiveSync] = useState(false);
-
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
-  const fetchProjects = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      if (data && data.length > 0) {
-        // Map data defensively to handle Supabase column variations (Strings vs Arrays)
-        const mappedData = data.map(project => ({
-          ...project,
-          tech: Array.isArray(project.tech) ? project.tech :
-            (typeof project.tech === 'string' ? project.tech.split(',').map(t => t.trim()) : []),
-          gallery_images: Array.isArray(project.gallery_images) ? project.gallery_images :
-            (typeof project.gallery_images === 'string' ? project.gallery_images.split(',').map(img => img.trim()) : []),
-          metrics: Array.isArray(project.metrics) ? project.metrics :
-            (typeof project.metrics === 'string' ? JSON.parse(project.metrics) : [])
-        }));
-        setProjects(mappedData);
-        setIsLiveSync(true);
-      }
-    } catch (err) {
-      // Silence 404 console noise - seamlessly use fallback if table doesn't exist yet
-      const isNotFoundError = err.code === 'PGRST205' || err.status === 404 || err.message?.includes('does not exist');
-      
-      if (!isNotFoundError) {
-        console.error('Unexpected Projects fetch error:', err);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
-    <section id="projects" className="py-32 transition-colors duration-500">
-      <div className="container mx-auto px-8">
-        <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
+    <section id="projects" className="py-20 transition-colors duration-500">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-6">
           <div>
-            <div className="badge-elite mb-6">PROJECT_MANIFEST</div>
-            <h2 className="text-4xl md:text-5xl font-black text-[var(--text-main)] tracking-tight">
-              Enterprise Grade <br />
-              <span className="gradient-text">Case Studies.</span>
+            <p className="text-primary text-sm font-semibold tracking-widest uppercase mb-4">Projects</p>
+            <h2 className="text-3xl md:text-4xl font-black text-[var(--text-main)] tracking-tight">
+              Case Studies
             </h2>
           </div>
-          <div className="flex flex-col items-end gap-3">
-            <p className="text-[var(--text-dim)] max-w-sm text-right text-sm leading-relaxed font-mono font-bold">
-              FOCUSED ON SCALE AND IMPACT <br />
-              HARDENED IN PRODUCTION
-            </p>
-            {isLiveSync && (
-              <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-[9px] font-mono text-green-600 dark:text-green-400 font-black tracking-widest">LIVE_DB_ACTIVE</span>
-              </div>
-            )}
-          </div>
+          <p className="text-[var(--text-dim)] max-w-xs text-sm leading-relaxed">
+            Real-world enterprise systems designed and developed to deliver high business impact.
+          </p>
         </div>
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-24 text-[var(--text-dim)]">
-            <Loader2 className="animate-spin mb-4" size={32} />
-            <span className="text-[10px] font-mono tracking-widest uppercase">Initializing_Project_Stream...</span>
+          <div className="flex flex-col items-center justify-center py-16 text-[var(--text-dim)]">
+            <Loader2 className="animate-spin mb-4" size={24} />
+            <span className="text-xs uppercase tracking-wider">Loading projects...</span>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, idx) => (
               <motion.div
                 key={project.id || idx}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
@@ -150,80 +98,58 @@ const Projects = () => {
               >
                 {/* Project Image Header */}
                 <div className="relative aspect-video overflow-hidden border-b border-[var(--border-color)] bg-zinc-200/50 dark:bg-zinc-900/50 cursor-pointer" onClick={() => setSelectedProject(project)}>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 opacity-0 dark:opacity-100" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-200/40 to-transparent z-10 opacity-100 dark:opacity-0" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10" />
                   {project.image_url ? (
                     <img
                       src={project.image_url}
                       alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-primary/5">
-                      <div className="flex flex-col items-center gap-3">
-                        <Database size={24} className="text-primary/40" />
-                        <div className="text-[9px] font-mono text-[var(--text-dim)] tracking-[0.3em] uppercase select-none">
-                          System_Visual_Secure
-                        </div>
-                      </div>
+                      <Database size={24} className="text-primary/40" />
                     </div>
                   )}
 
-                  <div className="absolute top-4 right-4 z-20 flex gap-2">
-                    <button className="p-2 glass bg-white/80 dark:bg-zinc-950/50 hover:bg-primary hover:text-white transition-all border-[var(--border-color)] group/btn">
-                      <Github size={14} className="text-[var(--text-dim)] group-hover/btn:text-white" />
+                  <div className="absolute top-3 right-3 z-20 flex gap-2">
+                    <button className="p-1.5 glass bg-white/80 dark:bg-zinc-950/50 hover:bg-primary hover:text-white transition-all border-[var(--border-color)]">
+                      <Github size={13} className="text-[var(--text-dim)] hover:text-inherit" />
                     </button>
-                    <button className="p-2 glass bg-white/80 dark:bg-zinc-950/50 hover:bg-primary hover:text-white transition-all border-[var(--border-color)] group/btn">
-                      <ExternalLink size={14} className="text-[var(--text-dim)] group-hover/btn:text-white" />
+                    <button className="p-1.5 glass bg-white/80 dark:bg-zinc-950/50 hover:bg-primary hover:text-white transition-all border-[var(--border-color)]">
+                      <ExternalLink size={13} className="text-[var(--text-dim)] hover:text-inherit" />
                     </button>
                   </div>
                 </div>
 
-                <div className="p-8 flex flex-col flex-1">
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="px-3 py-1 bg-primary/10 text-primary text-[9px] font-black tracking-widest uppercase rounded">
+                <div className="p-6 flex flex-col flex-1">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="px-2 py-0.5 bg-primary/10 text-primary text-[9px] font-bold tracking-wider uppercase rounded">
                       {project.category}
                     </span>
                     <button
                       onClick={() => setSelectedProject(project)}
-                      className="text-[var(--text-dim)] hover:text-primary transition-colors font-mono text-[10px] tracking-widest uppercase flex items-center gap-2 font-black"
+                      className="text-primary hover:underline font-mono text-[10px] tracking-wider uppercase flex items-center gap-1 font-bold"
                     >
-                      Learn_More <ChevronRight size={14} />
+                      Details <ChevronRight size={12} />
                     </button>
                   </div>
 
                   <h3
                     onClick={() => setSelectedProject(project)}
-                    className="text-xl font-black text-[var(--text-main)] mb-6 tracking-tight group-hover:text-primary transition-colors cursor-pointer"
+                    className="text-lg font-bold text-[var(--text-main)] mb-3 group-hover:text-primary transition-colors cursor-pointer"
                   >
                     {project.title}
                   </h3>
 
-                  <p className="text-[var(--text-muted)] text-[13px] leading-relaxed mb-10 font-bold line-clamp-2">
+                  <p className="text-[var(--text-muted)] text-sm leading-relaxed mb-6 line-clamp-2">
                     {project.description}
                   </p>
 
-                  <div className="space-y-6 flex-1 mb-10">
-                    <div>
-                      <div className="text-[9px] font-mono text-[var(--text-dim)] uppercase tracking-widest mb-2 flex items-center gap-2 font-black">
-                        <span className="w-1 h-1 bg-red-500 rounded-full" /> Description
-                      </div>
-                      <p className="text-[var(--text-muted)] text-[12px] leading-relaxed line-clamp-4 font-semibold italic">{project.full_description}</p>
-                    </div>
-                    <div className="pt-4 border-t border-[var(--border-color)]">
-                      <div className="text-[9px] font-mono text-[var(--text-dim)] uppercase tracking-widest mb-2 flex items-center gap-2 font-black">
-                        <span className="w-1 h-1 bg-green-500 rounded-full" /> Key Impact
-                      </div>
-                      <p className="text-[var(--text-main)] text-[12px] font-black leading-relaxed">{project.rationale}</p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 mt-auto pt-6 border-t border-[var(--border-color)]">
+                  <div className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-[var(--border-color)]">
                     {(Array.isArray(project.tech) ? project.tech : []).slice(0, 4).map((t, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <div className="w-1 h-1 rounded-full bg-primary/40" />
-                        <span className="text-[8px] font-mono text-[var(--text-dim)] uppercase tracking-tight font-black">{t}</span>
-                      </div>
+                      <span key={i} className="px-2 py-0.5 bg-slate-100 dark:bg-white/5 text-[9px] font-mono text-[var(--text-dim)] rounded uppercase">
+                        {t}
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -236,137 +162,120 @@ const Projects = () => {
       {/* Project Detail Modal */}
       <AnimatePresence>
         {selectedProject && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedProject(null)}
-              className="absolute inset-0 bg-[var(--bg-deep)]/80 backdrop-blur-md"
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.98, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-6xl max-h-[95vh] glass border-[var(--border-color)] overflow-y-auto custom-scrollbar bg-[var(--bg-deep)]"
+              exit={{ opacity: 0, scale: 0.98, y: 10 }}
+              className="relative w-full max-w-4xl max-h-[90vh] glass border-[var(--border-color)] overflow-y-auto custom-scrollbar bg-[var(--bg-deep)] rounded-2xl"
             >
-              {/* Expansive Header: Large Image */}
-              <div className="relative w-full h-[300px] md:h-[450px] overflow-hidden border-b border-[var(--border-color)]">
+              {/* Header: Large Image */}
+              <div className="relative w-full h-[240px] md:h-[350px] overflow-hidden border-b border-[var(--border-color)]">
                 {selectedProject.image_url ? (
                   <img src={selectedProject.image_url} alt={selectedProject.title} className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-primary/5">
-                    <Layout size={64} className="text-primary/20" />
-                    <span className="text-[12px] font-mono tracking-[0.4em] text-[var(--text-dim)] uppercase italic">System_Blueprint_Secure</span>
+                  <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-primary/5">
+                    <Layout size={40} className="text-primary/20" />
+                    <span className="text-xs text-[var(--text-dim)] italic font-mono uppercase">System Design Blueprint</span>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] to-transparent opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] to-transparent opacity-80" />
                 
-                {/* Close Button Overlay */}
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="absolute top-6 right-6 z-50 p-3 bg-black/50 backdrop-blur-xl hover:bg-primary rounded-full transition-all group border border-white/10"
+                  className="absolute top-4 right-4 z-50 p-2 bg-black/40 hover:bg-primary rounded-full transition-all group border border-white/10"
                 >
-                  <X size={24} className="text-white group-hover:scale-110" />
+                  <X size={18} className="text-white group-hover:scale-110" />
                 </button>
               </div>
 
-              {/* Expansive Content Area */}
-              <div className="p-8 md:p-20">
-                <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
-                  <div className="max-w-3xl">
-                    <div className="badge-elite mb-6">{selectedProject.category}</div>
-                    <h2 className="text-4xl md:text-7xl font-black text-[var(--text-main)] tracking-tighter leading-tight mb-8">
+              {/* Content Area */}
+              <div className="p-6 md:p-12">
+                <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-8">
+                  <div className="max-w-2xl">
+                    <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-bold uppercase rounded mb-4 inline-block">
+                      {selectedProject.category}
+                    </span>
+                    <h2 className="text-2xl md:text-4xl font-black text-[var(--text-main)] tracking-tight mb-4">
                       {selectedProject.title}
                     </h2>
-                    <p className="text-[var(--text-muted)] text-xl md:text-2xl leading-relaxed font-semibold">
+                    <p className="text-[var(--text-muted)] text-base leading-relaxed">
                       {selectedProject.full_description || selectedProject.description}
                     </p>
                   </div>
 
-                  <div className="flex flex-col gap-4 min-w-[200px]">
-                    <button className="btn-primary w-full py-4 flex items-center justify-center gap-3">
-                      <Github size={18} /> Source_Code
+                  <div className="flex gap-3 w-full md:w-auto flex-shrink-0">
+                    <button className="btn-primary py-2 px-4 text-sm flex items-center gap-2 shadow-none rounded-lg flex-1 md:flex-none justify-center">
+                      <Github size={16} /> Code
                     </button>
-                    <button className="btn-secondary w-full py-4 flex items-center justify-center gap-3">
-                      <ExternalLink size={18} /> Live_System
+                    <button className="btn-secondary py-2 px-4 text-sm flex items-center gap-2 rounded-lg flex-1 md:flex-none justify-center">
+                      <ExternalLink size={16} /> Live Site
                     </button>
                   </div>
                 </div>
 
-                <div className="grid lg:grid-cols-3 gap-12 mb-20">
+                <div className="grid md:grid-cols-3 gap-8 mb-8">
                   {/* Left: Technical Rationale */}
-                  <div className="lg:col-span-2 p-10 bg-zinc-100 dark:bg-white/[0.03] border border-[var(--border-color)] rounded-3xl">
-                    <div className="text-[11px] font-mono text-primary uppercase tracking-[0.4em] mb-6 font-black flex items-center gap-2">
-                      <Zap size={16} /> Technical_Rationale
+                  <div className="md:col-span-2 p-6 bg-zinc-100 dark:bg-white/[0.03] border border-[var(--border-color)] rounded-2xl">
+                    <div className="text-xs font-semibold text-primary uppercase mb-3 flex items-center gap-2">
+                      <Zap size={14} /> Technical Choice
                     </div>
-                    <p className="text-[var(--text-muted)] text-lg leading-relaxed font-bold italic">
+                    <p className="text-[var(--text-muted)] text-sm leading-relaxed italic">
                       {selectedProject.rationale}
                     </p>
                   </div>
 
                   {/* Right: Key Metrics */}
-                  <div className="space-y-4">
-                    <div className="text-[11px] font-mono text-[var(--text-dim)] uppercase tracking-[0.4em] mb-4 font-black">Performance_KPIs</div>
+                  <div className="space-y-3">
+                    <div className="text-xs font-semibold text-[var(--text-dim)] uppercase mb-2">Metrics & KPIs</div>
                     {selectedProject.metrics && Array.isArray(selectedProject.metrics) && selectedProject.metrics.map((metric, mIdx) => (
-                      <div key={mIdx} className="p-6 glass border-[var(--border-color)] flex justify-between items-center group/metric hover:border-primary/30 transition-all">
-                        <div className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-[0.2em] font-black">{metric.label}</div>
-                        <div className="text-xl font-black text-primary transition-colors">{metric.value}</div>
+                      <div key={mIdx} className="p-4 glass border-[var(--border-color)] flex justify-between items-center hover:border-primary/20 transition-all">
+                        <div className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-wider">{metric.label}</div>
+                        <div className="text-base font-bold text-primary">{metric.value}</div>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* System Artifacts Gallery */}
-                {selectedProject.gallery_images && selectedProject.gallery_images.length > 0 && (
-                  <div className="mb-20">
-                    <div className="text-[11px] font-mono text-[var(--text-dim)] uppercase tracking-[0.4em] mb-8 font-black flex items-center gap-2">
-                      <Layout size={16} /> System_Artifact_Gallery
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-8">
-                      {selectedProject.gallery_images.map((img, i) => (
-                        <div key={i} className="rounded-2xl overflow-hidden glass border-[var(--border-color)]">
-                          <img src={img} alt={`${selectedProject.title} artifact ${i}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="grid md:grid-cols-2 gap-12 mb-20 border-t border-[var(--border-color)] pt-12">
+                {/* Challenges & Solutions */}
+                <div className="grid md:grid-cols-2 gap-8 mb-8 border-t border-[var(--border-color)] pt-8">
                   <div>
-                    <div className="text-[11px] font-mono text-[var(--text-dim)] uppercase tracking-[0.4em] mb-6 font-black flex items-center gap-2 text-primary">
-                      <span className="w-2 h-2 rounded-full bg-current" /> Detailed_Context
-                    </div>
-                    <p className="text-[var(--text-muted)] text-base leading-relaxed font-semibold italic">
+                    <div className="text-xs font-semibold text-primary uppercase mb-3">The Problem</div>
+                    <p className="text-[var(--text-muted)] text-sm leading-relaxed">
                       {selectedProject.problem}
                     </p>
                   </div>
                   <div>
-                    <div className="text-[11px] font-mono text-[var(--text-dim)] uppercase tracking-[0.4em] mb-6 font-black flex items-center gap-2 text-primary">
-                      <span className="w-2 h-2 rounded-full bg-current" /> Structural_Solution
-                    </div>
-                    <p className="text-[var(--text-muted)] text-base leading-relaxed font-semibold">
+                    <div className="text-xs font-semibold text-primary uppercase mb-3">The Solution</div>
+                    <p className="text-[var(--text-muted)] text-sm leading-relaxed">
                       {selectedProject.solution}
                     </p>
                   </div>
                 </div>
 
-                <div className="p-12 bg-primary/5 border border-primary/20 rounded-3xl mb-20">
-                  <div className="text-[11px] font-mono text-primary uppercase tracking-[0.4em] mb-4 font-black flex items-center gap-2">
-                    <Shield size={18} /> Verified_Operational_Impact
+                {/* Impact Banner */}
+                <div className="p-6 bg-primary/5 border border-primary/20 rounded-2xl mb-8">
+                  <div className="text-xs font-semibold text-primary uppercase mb-2 flex items-center gap-2">
+                    <Shield size={16} /> Verified Impact
                   </div>
-                  <p className="text-2xl md:text-4xl font-black text-[var(--text-main)] tracking-tight leading-tight">
+                  <p className="text-lg md:text-xl font-bold text-[var(--text-main)]">
                     {selectedProject.impact}
                   </p>
                 </div>
 
-                <div className="pt-12 border-t border-[var(--border-color)]">
-                  <div className="text-[11px] font-mono text-[var(--text-dim)] uppercase tracking-[0.4em] mb-8 font-black">Final_Infrastructure_Stack</div>
-                  <div className="flex flex-wrap gap-4">
+                <div className="pt-6 border-t border-[var(--border-color)]">
+                  <div className="text-xs font-semibold text-[var(--text-dim)] mb-4">Infrastructure & Tech Stack</div>
+                  <div className="flex flex-wrap gap-2">
                     {(Array.isArray(selectedProject.tech) ? selectedProject.tech : []).map((t, i) => (
-                      <span key={i} className="px-6 py-3 bg-white/[0.03] border border-[var(--border-color)] rounded-xl text-[12px] font-mono font-bold text-[var(--text-muted)] group hover:border-primary/50 transition-colors">
+                      <span key={i} className="px-3 py-1.5 bg-slate-100 dark:bg-white/5 border border-[var(--border-color)] rounded-lg text-xs font-mono font-medium text-[var(--text-muted)]">
                         {t}
                       </span>
                     ))}

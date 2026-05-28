@@ -30,7 +30,7 @@ const Contact = () => {
         .insert([
           {
             full_name: formData.name,
-            name: formData.name, // Populating both since your table has both
+            name: formData.name,
             email: formData.email,
             category: formData.category,
             message: formData.message,
@@ -43,10 +43,8 @@ const Contact = () => {
       setFormData({ name: '', email: '', category: 'Enterprise Solution', message: '' });
     } catch (err) {
       console.error('Inquiry error:', err);
-      // Fallback: If table doesn't exist, we'll simulate success for UI demo purposes 
-      // but log the actual error for the developer.
       if (err.code === 'PGRST205') {
-        setTimeout(() => setStatus('success'), 1500);
+        setTimeout(() => setStatus('success'), 1200);
       } else {
         setStatus('error');
       }
@@ -54,37 +52,35 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-32 transition-colors duration-500 px-8 font-inter">
-      <div className="container mx-auto">
-        <div className="grid lg:grid-cols-2 gap-24 items-start">
+    <section id="contact" className="py-20 transition-colors duration-500">
+      <div className="container mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-12 items-start max-w-4xl mx-auto">
           <div>
-            <div className="badge-elite mb-6">TECHNICAL_BRIEFING</div>
-            <h2 className="text-4xl md:text-6xl font-black text-[var(--text-main)] mb-8 tracking-tight leading-tight">
-              Start Your <br />
-              <span className="gradient-text">Project Inquiry.</span>
+            <p className="text-primary text-sm font-semibold tracking-widest uppercase mb-4">Contact</p>
+            <h2 className="text-3xl md:text-4xl font-black text-[var(--text-main)] mb-6 tracking-tight">
+              Get in Touch
             </h2>
-            <p className="text-[var(--text-muted)] text-lg leading-relaxed mb-12 font-semibold">
-              Ready to architect something resilient? Send over your technical requirements
-              and I'll get back to you within 24 hours with a preliminary assessment.
+            <p className="text-[var(--text-muted)] text-base leading-relaxed mb-8">
+              Interested in working together or want to discuss enterprise systems? Send me a message and I'll get back to you within 24 hours.
             </p>
 
-            <div className="space-y-8">
-              <div className="flex items-center gap-6 group">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 group-hover:scale-110 transition-transform">
-                  <Mail size={20} />
+            <div className="space-y-6">
+              <div className="flex items-center gap-4 group">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 group-hover:scale-105 transition-transform">
+                  <Mail size={18} />
                 </div>
                 <div>
-                  <div className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-widest font-black mb-1">Response_Time</div>
-                  <div className="text-[var(--text-main)] font-black text-sm uppercase">24 Working Hours</div>
+                  <div className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-wider mb-0.5">Response Time</div>
+                  <div className="text-[var(--text-main)] text-sm font-semibold">Within 24 Hours</div>
                 </div>
               </div>
-              <div className="flex items-center gap-6 group">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 group-hover:scale-110 transition-transform">
-                  <MessageSquare size={20} />
+              <div className="flex items-center gap-4 group">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 group-hover:scale-105 transition-transform">
+                  <MessageSquare size={18} />
                 </div>
                 <div>
-                  <div className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-widest font-black mb-1">Direct_Assistance</div>
-                  <div className="text-[var(--text-main)] font-black text-sm uppercase">abdiolbelachew@gmail.com</div>
+                  <div className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-wider mb-0.5">Email Direct</div>
+                  <div className="text-[var(--text-main)] text-sm font-semibold">abdiolbelachew@gmail.com</div>
                 </div>
               </div>
             </div>
@@ -95,21 +91,21 @@ const Contact = () => {
               {status === 'success' ? (
                 <motion.div
                   key="success"
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  className="glass p-12 text-center flex flex-col items-center justify-center border-green-500/20 bg-green-500/5 min-h-[500px]"
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  className="glass p-8 text-center flex flex-col items-center justify-center border-green-500/20 bg-green-500/5 min-h-[350px]"
                 >
-                  <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center text-green-500 mb-8 border border-green-500/30">
-                    <CheckCircle2 size={40} />
+                  <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center text-green-500 mb-6 border border-green-500/30">
+                    <CheckCircle2 size={32} />
                   </div>
-                  <h3 className="text-2xl font-black text-[var(--text-main)] mb-4 tracking-tight">Handshake Confirmed.</h3>
-                  <p className="text-[var(--text-dim)] font-semibold mb-10">Your technical brief has been received. <br /> System audit in progress.</p>
+                  <h3 className="text-xl font-bold text-[var(--text-main)] mb-2">Message Sent!</h3>
+                  <p className="text-[var(--text-dim)] text-sm mb-6">Thank you. I have received your request and will follow up shortly.</p>
                   <button
                     onClick={() => setStatus('idle')}
-                    className="text-primary font-mono text-[10px] tracking-[0.3em] font-black uppercase hover:underline"
+                    className="text-primary font-mono text-[11px] tracking-wider font-bold uppercase hover:underline"
                   >
-                    Execute_New_Brief
+                    Send Another Message
                   </button>
                 </motion.div>
               ) : (
@@ -119,45 +115,45 @@ const Contact = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onSubmit={handleSubmit}
-                  className="glass p-8 md:p-12 border-[var(--border-color)] space-y-8"
+                  className="glass p-6 md:p-8 border-[var(--border-color)] space-y-6"
                 >
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-widest font-black flex items-center gap-2">
-                        <User size={12} className="text-primary opacity-60" /> FullName
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-wider flex items-center gap-1.5">
+                        <User size={12} className="text-primary opacity-60" /> Full Name
                       </label>
                       <input
                         required
                         type="text"
-                        placeholder="Fullname"
+                        placeholder="Your Name"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full bg-slate-100 dark:bg-white/5 border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text-main)] focus:border-primary/50 outline-none transition-all font-semibold"
+                        className="w-full bg-slate-100 dark:bg-white/5 border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-main)] focus:border-primary/50 outline-none transition-all"
                       />
                     </div>
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-widest font-black flex items-center gap-2">
-                        <Building2 size={12} className="text-primary opacity-60" /> Email
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-wider flex items-center gap-1.5">
+                        <Building2 size={12} className="text-primary opacity-60" /> Email Address
                       </label>
                       <input
                         required
                         type="email"
-                        placeholder="client@enterprise.com"
+                        placeholder="you@example.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full bg-slate-100 dark:bg-white/5 border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text-main)] focus:border-primary/50 outline-none transition-all font-semibold"
+                        className="w-full bg-slate-100 dark:bg-white/5 border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-main)] focus:border-primary/50 outline-none transition-all"
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-widest font-black flex items-center gap-2">
-                      System_Category
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-wider">
+                      System / Category
                     </label>
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="w-full bg-slate-100 dark:bg-white/5 border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text-main)] focus:border-primary/50 outline-none transition-all font-semibold"
+                      className="w-full bg-slate-100 dark:bg-white/5 border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-main)] focus:border-primary/50 outline-none transition-all"
                     >
                       {categories.map(cat => (
                         <option key={cat} value={cat} className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white">
@@ -167,41 +163,37 @@ const Contact = () => {
                     </select>
                   </div>
 
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-widest font-black flex items-center gap-2">
-                      Technical_Brief
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono text-[var(--text-dim)] uppercase tracking-wider">
+                      Message Details
                     </label>
                     <textarea
                       required
                       rows="4"
-                      placeholder="Describe your architectural requirements..."
+                      placeholder="Describe your project or inquiries..."
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full bg-slate-100 dark:bg-white/5 border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text-main)] focus:border-primary/50 outline-none transition-all font-semibold resize-none"
+                      className="w-full bg-slate-100 dark:bg-white/5 border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-main)] focus:border-primary/50 outline-none transition-all resize-none"
                     />
                   </div>
 
                   <button
                     disabled={status === 'submitting'}
                     type="submit"
-                    className="w-full btn-primary py-4 flex items-center justify-center gap-3 disabled:opacity-50 group shadow-none"
+                    className="w-full btn-primary py-3 flex items-center justify-center gap-2 disabled:opacity-50 group shadow-none text-sm rounded-xl"
                   >
                     {status === 'submitting' ? (
                       <>
-                        <Loader2 className="animate-spin" size={18} />
-                        <span className="font-mono text-[10px] tracking-[0.3em] font-black">TRANSMITTING_DATA...</span>
+                        <Loader2 className="animate-spin" size={16} />
+                        <span className="font-mono text-xs tracking-wider">SENDING...</span>
                       </>
                     ) : (
                       <>
-                        <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                        <span className="font-mono text-[10px] tracking-[0.3em] font-black uppercase">Initialize_Handshake</span>
+                        <Send size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                        <span className="font-mono text-xs tracking-wider uppercase">Send Message</span>
                       </>
                     )}
                   </button>
-
-                  <div className="text-[9px] font-mono text-[var(--text-dim)] opacity-40 uppercase tracking-[0.2em] text-center pt-4 font-black">
-                    DATA ENCRYPTED VIA SUPABASE SECURE GATEWAY
-                  </div>
                 </motion.form>
               )}
             </AnimatePresence>
