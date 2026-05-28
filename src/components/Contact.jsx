@@ -16,7 +16,8 @@ const Contact = () => {
     'Enterprise Solution',
     'Full-Stack Development',
     'System Architecture',
-    'Stock/ERP Ecosystem',
+    'Stock/Inventory System',
+    'Archive Management',
     'Consultancy'
   ];
 

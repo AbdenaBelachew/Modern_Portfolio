@@ -222,7 +222,7 @@ const Projects = () => {
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] to-transparent opacity-80" />
-                
+
                 <button
                   onClick={() => setSelectedProject(null)}
                   className="absolute top-4 right-4 z-50 p-2 bg-black/40 hover:bg-primary rounded-full transition-all group border border-white/10"
