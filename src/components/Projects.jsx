@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, Loader2, Database, Shield, Zap, X, ChevronRight, Layout } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 const Projects = () => {
   const [projects, setProjects] = useState([
@@ -62,8 +63,41 @@ const Projects = () => {
       image_url: null
     }
   ]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        const mappedData = data.map(project => ({
+          ...project,
+          tech: Array.isArray(project.tech) ? project.tech :
+            (typeof project.tech === 'string' ? project.tech.split(',').map(t => t.trim()) : []),
+          gallery_images: Array.isArray(project.gallery_images) ? project.gallery_images :
+            (typeof project.gallery_images === 'string' ? project.gallery_images.split(',').map(img => img.trim()) : []),
+          metrics: Array.isArray(project.metrics) ? project.metrics :
+            (typeof project.metrics === 'string' ? JSON.parse(project.metrics) : [])
+        }));
+        setProjects(mappedData);
+      }
+    } catch (err) {
+      // Silence table checks
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section id="projects" className="py-20 transition-colors duration-500">
