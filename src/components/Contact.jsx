@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Send, CheckCircle2, Loader2, MessageSquare, Building2, User } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { addInquiry } from '../lib/store';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -26,29 +26,18 @@ const Contact = () => {
     setStatus('submitting');
 
     try {
-      const { error } = await supabase
-        .from('inquiries')
-        .insert([
-          {
-            full_name: formData.name,
-            name: formData.name,
-            email: formData.email,
-            category: formData.category,
-            message: formData.message,
-            created_at: new Date()
-          }
-        ]);
-
-      if (error) throw error;
+      addInquiry({
+        full_name: formData.name,
+        name: formData.name,
+        email: formData.email,
+        category: formData.category,
+        message: formData.message,
+      });
       setStatus('success');
       setFormData({ name: '', email: '', category: 'Enterprise Solution', message: '' });
     } catch (err) {
       console.error('Inquiry error:', err);
-      if (err.code === 'PGRST205') {
-        setTimeout(() => setStatus('success'), 1200);
-      } else {
-        setStatus('error');
-      }
+      setStatus('error');
     }
   };
 

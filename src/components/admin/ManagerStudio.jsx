@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
+import { deleteProject, getProjects, saveProject } from '../../lib/store';
 import {
   Plus,
   Trash2,
@@ -9,26 +9,18 @@ import {
   FileText,
   ChevronRight,
   Loader2,
-  AlertCircle,
   Save,
   Search,
   Package,
   Upload,
   X,
-  Check,
-  Smartphone,
-  Monitor,
   Menu,
-  Activity,
   LogOut,
-  Settings,
-  MoreVertical
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 // --- Components ---
 
-const ImageUploader = ({ currentUrl, onUpload, label, onSetupRequired }) => {
+const ImageUploader = ({ currentUrl, onUpload, label }) => {
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
@@ -170,9 +162,6 @@ const ManagerStudio = () => {
   });
 
   const [error, setError] = useState(null);
-  const [setupMode, setSetupMode] = useState(false);
-  const [serviceKey, setServiceKey] = useState('');
-  const [settingUp, setSettingUp] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -216,49 +205,18 @@ const ManagerStudio = () => {
     }
   }, [selectedId, projects]);
 
-  const handleSelfHealing = async () => {
-    if (!serviceKey) return;
-    setSettingUp(true);
-    try {
-      const { createClient } = await import('@supabase/supabase-js');
-      const adminSupabase = createClient(import.meta.env.VITE_SUPABASE_URL, serviceKey);
-
-      const { error: createError } = await adminSupabase.storage.createBucket('projects', {
-        public: true,
-        allowedMimeTypes: ['image/*']
-      });
-
-      if (createError) throw createError;
-
-      setSetupMode(false);
-      setServiceKey('');
-      alert('✓ Storage Initialized. You can now upload images!');
-    } catch (err) {
-      alert('Setup failed: ' + err.message);
-    } finally {
-      setSettingUp(false);
-    }
-  };
-
-  const fetchProjects = async () => {
+  const fetchProjects = () => {
     setLoading(true);
-    const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
-    if (!error) setProjects(data || []);
+    setProjects(getProjects());
     setLoading(false);
   };
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      if (selectedId) {
-        const { error } = await supabase.from('projects').update({ ...formData }).eq('id', selectedId);
-        if (error) throw error;
-      } else {
-        const { data, error } = await supabase.from('projects').insert([{ ...formData }]).select();
-        if (error) throw error;
-        if (data) setSelectedId(data[0].id);
-      }
-      await fetchProjects();
+      const saved = saveProject({ ...formData, id: selectedId || undefined });
+      setSelectedId(saved.id);
+      fetchProjects();
     } catch (err) {
       alert(err.message);
     } finally {
@@ -266,14 +224,12 @@ const ManagerStudio = () => {
     }
   };
 
-  const handleDelete = async (e, id) => {
+  const handleDelete = (e, id) => {
     e.stopPropagation();
     if (!window.confirm('Delete project permanently?')) return;
-    const { error } = await supabase.from('projects').delete().eq('id', id);
-    if (!error) {
-      if (selectedId === id) setSelectedId(null);
-      fetchProjects();
-    }
+    deleteProject(id);
+    if (selectedId === id) setSelectedId(null);
+    fetchProjects();
   };
 
   const filteredProjects = projects.filter(p => p.title.toLowerCase().includes(search.toLowerCase()));
@@ -416,7 +372,6 @@ const ManagerStudio = () => {
               label="Primary Identification Asset"
               currentUrl={formData.image_url}
               onUpload={url => setFormData({ ...formData, image_url: url })}
-              onSetupRequired={() => setSetupMode(true)}
             />
             <div className="space-y-8">
               <div className="space-y-3">
@@ -532,7 +487,6 @@ const ManagerStudio = () => {
                     currentUrl={img}
                     onUpload={url => updateArray('gallery_images', i, url)}
                     label={`Visual_Node_0${i + 1}`}
-                    onSetupRequired={() => setSetupMode(true)}
                   />
                   <div className="flex gap-2">
                     <input
@@ -555,60 +509,6 @@ const ManagerStudio = () => {
 
         </div>
       </main>
-
-      {/* Setup Mode Overlay */}
-      <AnimatePresence>
-        {setupMode && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-md"
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="max-w-md w-full bg-white dark:bg-zinc-900 rounded-[30px] p-10 shadow-2xl space-y-6"
-            >
-              <div className="flex flex-col items-center justify-center text-center space-y-4 mb-6">
-                <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center">
-                  <AlertCircle size={32} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-black">Storage Uninitialized</h3>
-                  <p className="text-sm text-zinc-500 mt-2">The <strong className="text-zinc-900 dark:text-white">projects</strong> storage bucket is missing in your Supabase configuration.</p>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <p className="text-[12px] font-bold text-zinc-400 tracking-widest uppercase">Self-Healing Protocol</p>
-                  <p className="text-sm text-zinc-500 leading-relaxed">
-                    To fix this instantly, please paste your <strong className="text-zinc-900 dark:text-white">Service Role Key</strong> below. The system will automatically construct the required data structures.
-                  </p>
-                  <input
-                    value={serviceKey}
-                    onChange={e => setServiceKey(e.target.value)}
-                    placeholder="eyJhbGciOiJIUzI1NiIs..."
-                    className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-white/10 rounded-2xl p-4 text-xs font-mono outline-none focus:ring-4 focus:ring-primary/5 transition-all text-center"
-                  />
-                </div>
-                <div className="flex gap-3">
-                  <button onClick={() => { setSetupMode(false); setServiceKey(''); }} className="px-6 py-4 text-[11px] font-bold uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-white/5 rounded-2xl transition-all w-full">Abort</button>
-                  <button
-                    onClick={handleSelfHealing}
-                    disabled={settingUp || !serviceKey}
-                    className="px-6 py-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-[11px] font-black uppercase tracking-widest rounded-2xl shadow-xl transition-all w-full flex justify-center items-center gap-2 hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
-                  >
-                    {settingUp ? <Loader2 size={16} className="animate-spin" /> : 'Initialize Storage'}
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <style dangerouslySetInnerHTML={{
         __html: `

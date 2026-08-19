@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '../../lib/supabase';
+import { login } from '../../lib/auth';
 import { Shield, Lock, Loader2, AlertCircle, Terminal } from 'lucide-react';
 
 const Login = () => {
@@ -19,10 +19,7 @@ const Login = () => {
         setLoading(true);
         setError(null);
 
-        const { error: authError } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
+        const { error: authError } = login(email, password);
 
         if (authError) {
             setError(authError.message);

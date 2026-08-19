@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
+import { getProject, saveProject } from '../../lib/store';
 import { 
   ArrowLeft, 
   Save, 
@@ -92,9 +92,9 @@ const ProjectEditor = () => {
 
   const fetchProject = async () => {
     try {
-      const { data, error } = await supabase.from('projects').select('*').eq('id', id).single();
-      if (error) throw error;
-      if (data) setFormData({
+      const data = getProject(id);
+      if (!data) throw new Error('Project not found');
+      setFormData({
         ...data,
         tech: data.tech || [],
         gallery_images: data.gallery_images || [],
@@ -110,10 +110,7 @@ const ProjectEditor = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const { error: saveError } = isEdit 
-        ? await supabase.from('projects').update({ ...formData }).eq('id', id)
-        : await supabase.from('projects').insert([{ ...formData }]);
-      if (saveError) throw saveError;
+      saveProject({ ...formData, id: isEdit ? id : undefined });
       navigate('/admin/dashboard');
     } catch (err) {
       setError(err.message);

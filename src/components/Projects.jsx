@@ -1,103 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, Loader2, Database, Shield, Zap, X, ChevronRight, Layout } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { getProjects } from '../lib/store';
 
 const Projects = () => {
-  const [projects, setProjects] = useState([
-    {
-      id: 'fallback-1',
-      title: "StockMaster ERP Ecosystem",
-      category: "Enterprise Supply Chain",
-      description: "A comprehensive backend-heavy ERP solution for national-level inventory and procurement synchronization.",
-      full_description: "This project involved architecting a massive .NET Core ecosystem to replace legacy siloed inventory systems. The core challenge was high-concurrency stock synchronization across multiple physical warehouses.",
-      rationale: "Selected a Microservices architecture to ensure that the core 'Inventory' and 'Procurement' domains could scale independently during peak seasonal traffic. Redis was chosen as the shared state layer to handle race conditions in warehouse stock updates.",
-      problem: "National-level distributors were struggling with siloed inventory data, manual reconciliation errors, and 30%+ stock wastage.",
-      solution: "Architected a centralized .NET Core ecosystem featuring real-time inventory synchronization, automated procurement logic, and multi-warehouse management.",
-      impact: "Reduced inventory discrepancies by 95% and accelerated order fulfillment cycles by 40%.",
-      metrics: [
-        { label: "Consistency", value: "99.99%" },
-        { label: "Sync Latency", value: "< 200ms" },
-        { label: "Throughput", value: "50k/min" }
-      ],
-      tech: ["ASP.NET Core", "SQL Server", "Redis", "EF Core"],
-      gallery_images: [],
-      image_url: null
-    },
-    {
-      id: 'fallback-2',
-      title: "PharmaConnect Management",
-      category: "HealthTech",
-      description: "Secure health-tech platform for pharmaceutical compliance and patient record management.",
-      full_description: "PharmaConnect was designed to solve the critical issue of drug expiry and prescriptive compliance in retail pharmacy environments.",
-      rationale: "Compliance was the primary driver. We implemented a strictly typed domain model to prevent medication errors and leveraged ASP.NET Core Identity for a hardened, HIPAA-aligned authentication layer.",
-      problem: "Retail pharmacies faced high operational overhead, compliance risks with expiry tracking, and slow retrieval of patient historical records.",
-      solution: "Developed a secure, RBAC-protected management system with automated drug expiry alerts, encrypted prescription storage, and integrated billing.",
-      impact: "Ensured 100% regulatory compliance and reduced patient wait times by an average of 15 minutes per visit.",
-      metrics: [
-        { label: "Uptime", value: "99.9%" },
-        { label: "Search Speed", value: "0.1s" },
-        { label: "Data Integrity", value: "100%" }
-      ],
-      tech: ["React", ".NET 9.0", "PostgreSQL", "JWT"],
-      gallery_images: [],
-      image_url: null
-    },
-    {
-      id: 'fallback-3',
-      title: "ArchivaSecure DMS",
-      category: "Document Management",
-      description: "High-performance digital archiving system for government-level record durability.",
-      full_description: "ArchivaSecure is a digital transformation powerhouse. It serves as a resilient document management system for government departments dealing with millions of physical records.",
-      rationale: "Retrievability at scale was key. We chose ElasticSearch for its powerful meta-data indexing, allowing sub-second retrieval across millions of encrypted PDF artifacts.",
-      problem: "Government departments were overwhelmed by physical record backlogs, making critical data retrieval slow and prone to loss.",
-      solution: "Implemented a high-performance Digital Archives system with OCR capabilities, elastic meta-search, and redundant secure storage.",
-      impact: "Digitized over 2 million records, achieving sub-second retrieval times and ensuring long-term data durability.",
-      metrics: [
-        { label: "Records Indexed", value: "2M+" },
-        { label: "Retrieval", value: "0.5s" },
-        { label: "Redundancy", value: "Geo-Ref" }
-      ],
-      tech: ["C#", "ASP.NET Core", "Blazor", "SQL Server"],
-      gallery_images: [],
-      image_url: null
-    }
-  ]);
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
-    fetchProjects();
+    setProjects(getProjects());
+    setLoading(false);
   }, []);
-
-  const fetchProjects = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      if (data && data.length > 0) {
-        const mappedData = data.map(project => ({
-          ...project,
-          tech: Array.isArray(project.tech) ? project.tech :
-            (typeof project.tech === 'string' ? project.tech.split(',').map(t => t.trim()) : []),
-          gallery_images: Array.isArray(project.gallery_images) ? project.gallery_images :
-            (typeof project.gallery_images === 'string' ? project.gallery_images.split(',').map(img => img.trim()) : []),
-          metrics: Array.isArray(project.metrics) ? project.metrics :
-            (typeof project.metrics === 'string' ? JSON.parse(project.metrics) : [])
-        }));
-        setProjects(mappedData);
-      }
-    } catch (err) {
-      // Silence table checks
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <section id="projects" className="py-20 transition-colors duration-500">

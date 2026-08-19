@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
+import { deleteInquiry, deleteProject, getInquiries, getProjects } from '../../lib/store';
+import { logout } from '../../lib/auth';
 import {
   Plus,
   Trash2,
@@ -29,16 +30,8 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setSyncing(true);
-      const [projRes, inqRes] = await Promise.all([
-        supabase.from('projects').select('*').order('created_at', { ascending: false }),
-        supabase.from('inquiries').select('*').order('created_at', { ascending: false })
-      ]);
-
-      if (projRes.error) throw projRes.error;
-      if (inqRes.error) console.warn("Inquiries fetch error:", inqRes.error);
-
-      setProjects(projRes.data || []);
-      setInquiries(inqRes.data || []);
+      setProjects(getProjects());
+      setInquiries(getInquiries());
     } catch (err) {
       console.error('Dash error:', err);
     } finally {
@@ -48,7 +41,7 @@ const Dashboard = () => {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    logout();
     navigate('/admin/login');
   };
 
@@ -56,8 +49,8 @@ const Dashboard = () => {
     if (!window.confirm('CRITICAL: Permanent data deletion requested. Continue?')) return;
 
     try {
-      const { error } = await supabase.from(table).delete().eq('id', id);
-      if (error) throw error;
+      if (table === 'projects') deleteProject(id);
+      if (table === 'inquiries') deleteInquiry(id);
 
       if (table === 'projects') setProjects(projects.filter(p => p.id !== id));
       if (table === 'inquiries') setInquiries(inquiries.filter(i => i.id !== id));
