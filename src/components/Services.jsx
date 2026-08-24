@@ -5,10 +5,10 @@ import { Code2, Database, Network, Layout, ShieldCheck, Zap } from 'lucide-react
 const Services = () => {
   const services = [
     {
-      title: "Enterprise Backend Systems",
-      desc: "Architecting robust ASP.NET Core ecosystems for large-scale operations, from stock management to national archives.",
+      title: "Enterprise Application Systems",
+      desc: "Architecting full-stack platforms with React, ASP.NET Core, and Node.js for large-scale operations — from dashboards and workflows to archives and ERP-aligned systems.",
       icon_name: "database",
-      tags: ["C#", ".NET 9/10", "NodeJS"]
+      tags: ["React", ".NET", "Node.js"]
     },
     {
       title: "Secure API Ecosystems",
@@ -24,7 +24,7 @@ const Services = () => {
     },
     {
       title: "Full-Stack Enterprise Dashboards",
-      desc: "Building high-density React dashboards that provide real-time visibility into complex business metrics and operations.",
+      desc: "Building high-density React dashboards and full-stack interfaces that provide real-time visibility into complex business metrics and operations.",
       icon_name: "layout",
       tags: ["React", "Custom UI", "Dashboards"]
     }

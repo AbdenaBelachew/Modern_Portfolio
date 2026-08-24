@@ -5,13 +5,13 @@ import { Layers, Network, ShieldAlert } from 'lucide-react';
 const About = () => {
   const strengths = [
     {
-      title: "Backend Architecture",
-      desc: "Building robust backend systems with ASP.NET Core for enterprise applications, complex workflows, and high-performance APIs.",
+      title: "Full-Stack Architecture",
+      desc: "Building enterprise applications with React on the frontend and ASP.NET Core, Node.js, and REST APIs on the backend — from complex workflows to high-performance services.",
       icon: <Layers size={22} />
     },
     {
       title: "Enterprise Solutions",
-      desc: "Delivered systems including Stock Management, Pharmacy Management, Digital Archives, and Shareholder Management platforms.",
+      desc: "Delivered systems including SAP ERP transformation support, Shareholder & AGM, Risk & Compliance, Outsourcing Management, Digital Archives, and Pharmacy platforms.",
       icon: <Network size={22} />
     },
     {
@@ -37,7 +37,7 @@ const About = () => {
               <span className="text-primary">structured engineering.</span>
             </h2>
             <p className="text-[var(--text-muted)] text-base mb-6 leading-relaxed">
-              Over 4 years, I've focused on building resilient, high-availability systems that serve as the digital backbone for large-scale enterprises.
+              Over 4 years, I've focused on building resilient, high-availability systems with React, .NET, and Node.js that serve as the digital backbone for large-scale enterprises.
             </p>
             <p className="text-[var(--text-dim)] text-sm mb-10 leading-relaxed">
               I combine technical precision with operational empathy — designing systems that solve real business bottlenecks while ensuring organizational scalability and security.

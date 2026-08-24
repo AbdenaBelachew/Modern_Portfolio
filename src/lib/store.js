@@ -3,7 +3,7 @@ import { defaultProjects } from '../data/projects';
 const PROJECTS_KEY = 'portfolio_projects';
 const INQUIRIES_KEY = 'portfolio_inquiries';
 const SEED_VERSION_KEY = 'portfolio_seed_version';
-const SEED_VERSION = 2;
+const SEED_VERSION = 3;
 
 function canUseStorage() {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';

@@ -6,10 +6,10 @@ const Experience = () => {
   const experiences = [
     {
       company: "Enterprise Initiatives",
-      role: "Full-Stack Development & Project Leadership",
+      role: "Software Engineer | Full-Stack & Enterprise Applications Developer",
       period: "2022 — PRESENT",
       achievements: [
-        "Developed and contributed to scalable enterprise applications using ASP.NET MVC / .NET Core, React, Node.js, and SQL-based technologies.",
+        "Developed and delivered scalable enterprise applications using React, ASP.NET MVC / .NET Core, Node.js, and SQL-based technologies.",
         "Led development efforts and project delivery across multiple enterprise initiatives, from architecture design through deployment and ongoing support.",
         "Collaborated with cross-functional teams and ensured successful project delivery while maintaining high engineering standards.",
         "Implemented Jenkins CI/CD pipelines to streamline build and release processes, and utilized Docker containerization for consistent deployments.",

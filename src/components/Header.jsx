@@ -57,7 +57,7 @@ const Header = () => {
 
           <a
             href={resumePdf}
-            download="dotnet.pdf"
+            download="Abdena_Belachew_Resume.pdf"
             className="hidden sm:block text-xs font-semibold text-[var(--text-dim)] hover:text-primary transition-all"
           >
             Resume
@@ -121,7 +121,7 @@ const Header = () => {
               <div className="flex items-center gap-3 px-6 py-4">
                 <a
                   href={resumePdf}
-                  download="dotnet.pdf"
+                  download="Abdena_Belachew_Resume.pdf"
                   onClick={close}
                   className="flex-1 text-center py-2 border border-[var(--border-color)] rounded-lg
                              text-xs font-semibold text-[var(--text-dim)] hover:text-primary hover:border-primary transition-all"

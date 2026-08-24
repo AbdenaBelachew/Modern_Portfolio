@@ -12,7 +12,7 @@ const TechStack = () => {
     {
       category: "Frontend Engineering",
       icon: <Layout size={18} />,
-      tools: ["React", "JavaScript (ES6+)", "Tailwind CSS", "Framer Motion", "Blazor"]
+      tools: ["React", "Next.js", "JavaScript (ES6+)", "Tailwind CSS", "Framer Motion", "Material UI"]
     },
     {
       category: "Data & Systems",

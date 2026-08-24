@@ -35,7 +35,7 @@ const Architecture = () => {
             Engineering Principles
           </h2>
           <p className="text-[var(--text-muted)] text-base leading-relaxed">
-            I focus on the structural integrity of every system. From the database layer to the API services, every component is engineered to be highly maintainable, secure, and resilient.
+            I focus on the structural integrity of every system. From React interfaces and API services to the database layer, every component is engineered to be highly maintainable, secure, and resilient.
           </p>
         </div>
 

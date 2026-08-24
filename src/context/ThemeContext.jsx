@@ -4,8 +4,14 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
+    const migrated = localStorage.getItem('theme-default-v2');
+    if (!migrated) {
+      localStorage.setItem('theme-default-v2', '1');
+      localStorage.setItem('theme', 'light');
+      return 'light';
+    }
     const saved = localStorage.getItem('theme');
-    return saved || 'dark';
+    return saved === 'dark' || saved === 'light' ? saved : 'light';
   });
 
   useEffect(() => {

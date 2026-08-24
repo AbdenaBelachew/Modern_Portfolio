@@ -14,14 +14,13 @@ const Hero = () => {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto text-center"
         >
-          <h1 className="text-5xl md:text-7xl mb-6 leading-[1.1] tracking-tight text-[var(--text-main)] font-black">
-            Senior Full-Stack <br />
-            <span className="gradient-text">.NET Developer</span>
+          <h1 className="text-4xl md:text-6xl mb-6 leading-[1.15] tracking-tight text-[var(--text-main)] font-black">
+            Software Engineer | Full-Stack & Enterprise Applications Developer
           </h1>
 
           <p className="text-base md:text-lg text-[var(--text-muted)] max-w-2xl mx-auto mb-10 leading-relaxed">
-            I design and build secure, high-performance enterprise applications
-            that streamline operations and drive business efficiency at scale.
+            I design and build secure, high-performance enterprise applications with React on the frontend
+            and .NET, Node.js, and SQL on the backend — streamlining operations and driving efficiency at scale.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
@@ -34,7 +33,7 @@ const Hero = () => {
               { label: 'Experience', value: '4+ Years', icon: <Cpu size={18} /> },
               { label: 'Systems Built', value: '10+', icon: <Database size={18} /> },
               { label: 'Uptime', value: '99.99%', icon: <ShieldCheck size={18} /> },
-              { label: 'Stack', value: '.NET / React', icon: <Terminal size={18} /> },
+              { label: 'Stack', value: 'React / .NET', icon: <Terminal size={18} /> },
             ].map((stat, idx) => (
               <div key={idx} className="glass p-5 group hover:border-primary/30 transition-all cursor-default">
                 <div className="text-primary mb-3 group-hover:scale-110 transition-transform">
