@@ -1,16 +1,42 @@
-# React + Vite
+# Abdena Belachew — Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Next.js (App Router) · TypeScript · Tailwind CSS v4 · Framer Motion · Lucide.
 
-Currently, two official plugins are available:
+```bash
+npm install
+npm run dev     # http://localhost:3000
+npm run build
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Editing content
 
-## React Compiler
+Content is separated from presentation. Edit these files only:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| File | Contains |
+| --- | --- |
+| `data/site.ts` | Name, title, hero, about, engineering impact, nav, SEO text |
+| `data/projects.ts` | Project cards (image, tech, result, links) |
+| `data/experience.ts` | Timeline entries |
+| `data/skills.ts` | Capability groups |
+| `data/social.ts` | GitHub, LinkedIn, email |
 
-## Expanding the ESLint configuration
+Unknown facts are written as `[PLACEHOLDER: …]`. They render with a dashed outline on the
+site so they can't be mistaken for real content. Replace them before publishing.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- `site.photo: null` shows an editorial photo placeholder frame; `project.image: null` does the same for screenshots.
+- `project.live` / `project.repo`: leave `null` if there's no public URL; the card says "Private codebase · walkthrough on request".
+- `impact[].metric`: optional. Only add a number you can verify.
+
+Theme tokens (colors, fonts) are at the top of `app/globals.css`.
+
+## Contact form
+
+By default the form validates input, then opens the visitor's email app with the message
+filled in, and says so on the page. To deliver messages directly, create a
+[Formspree](https://formspree.io) form and set:
+
+```
+NEXT_PUBLIC_FORM_ENDPOINT=https://formspree.io/f/xxxxxxx
+```
+
+in `.env.local` and in the Vercel project's environment variables.
