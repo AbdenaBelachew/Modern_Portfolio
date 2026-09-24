@@ -26,7 +26,7 @@ export default function Footer() {
               </li>
             ))}
             <li>
-              <a href="#top" className="link-draw text-muted transition-colors hover:text-ink">
+              <a href="#main" className="link-draw text-muted transition-colors hover:text-ink">
                 Back to top ↑
               </a>
             </li>

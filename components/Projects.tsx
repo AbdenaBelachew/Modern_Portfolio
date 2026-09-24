@@ -32,7 +32,7 @@ export default function Projects() {
             <Reveal className="mb-10 flex items-baseline justify-between gap-6 border-t border-line pt-6">
               <h3 className="text-2xl font-medium md:text-3xl">More projects</h3>
               <p className="font-mono text-xs text-muted">
-                Internal systems &amp; SaaS · {String(more.length).padStart(2, '0')}
+                Internal systems, SaaS &amp; websites · {String(more.length).padStart(2, '0')}
               </p>
             </Reveal>
             <Reveal>

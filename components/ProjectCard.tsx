@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, Github, Lock } from 'lucide-react';
 import type { Project } from '@/data/projects';
 import MobileDisclosure from './MobileDisclosure';
@@ -57,9 +58,19 @@ export function ProjectLinks({ project }: { project: Project }) {
   return (
     <div className="flex flex-wrap items-center gap-6 text-sm">
       {project.live && (
-        <a href={project.live} target="_blank" rel="noreferrer" className="group/link inline-flex items-center gap-1.5 font-medium text-accent">
-          <span className="link-draw">View project</span>
-          <ArrowRight size={15} aria-hidden className="transition-transform duration-300 group-hover/link:translate-x-1" />
+        <a
+          href={project.live}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Visit the ${project.name} website (opens in a new tab)`}
+          className="group/link inline-flex items-center gap-1.5 font-medium text-accent"
+        >
+          <span className="link-draw">Visit site</span>
+          <ArrowUpRight
+            size={15}
+            aria-hidden
+            className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+          />
         </a>
       )}
       {project.repo && (
@@ -74,6 +85,23 @@ export function ProjectLinks({ project }: { project: Project }) {
         </a>
       )}
     </div>
+  );
+}
+
+export function CaseStudyLink({ project, compact }: { project: Project; compact?: boolean }) {
+  return (
+    <Link
+      href={`/work/${project.slug}`}
+      aria-label={`Read the ${project.name} case study`}
+      className={`group/cs inline-flex items-center gap-2 rounded-md font-medium transition-all duration-300 ${
+        compact
+          ? 'text-sm text-accent'
+          : 'bg-ink px-4 py-2.5 text-sm text-bg shadow-card hover:-translate-y-px hover:bg-accent hover:text-on-accent hover:shadow-lift active:translate-y-0'
+      }`}
+    >
+      {compact ? <span className="link-draw">Case study</span> : 'Read case study'}
+      <ArrowRight size={15} aria-hidden className="transition-transform duration-300 group-hover/cs:translate-x-1" />
+    </Link>
   );
 }
 
@@ -108,7 +136,9 @@ export default function ProjectCard({ project, index, flip }: { project: Project
         <ProjectMeta project={project} index={index} />
 
         <h3 className="mt-4 text-3xl leading-tight font-medium transition-transform duration-500 ease-out group-hover:translate-x-1 md:text-[2rem]">
-          {project.name}
+          <Link href={`/work/${project.slug}`} className="link-draw">
+            {project.name}
+          </Link>
         </h3>
         <p className="mt-1 text-muted">{project.category}</p>
 
@@ -144,7 +174,8 @@ export default function ProjectCard({ project, index, flip }: { project: Project
           {project.result}
         </p>
 
-        <div className="mt-7">
+        <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
+          <CaseStudyLink project={project} />
           <ProjectLinks project={project} />
         </div>
       </div>

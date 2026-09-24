@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion, useScroll } from 'framer-motion';
 import { Github, Linkedin, Mail, Menu, X } from 'lucide-react';
 import { nav, site } from '@/data/site';
@@ -15,7 +16,12 @@ const ids = nav.map((n) => n.id);
 const socialIcons: Record<Social['label'], typeof Mail> = { GitHub: Github, LinkedIn: Linkedin, Email: Mail };
 
 export default function Navbar() {
-  const active = useActiveSection(ids);
+  const pathname = usePathname();
+  const onHome = pathname === '/';
+  // Section links jump in-page on the home page and route back to it elsewhere.
+  const to = (id: string) => (onHome ? `#${id}` : `/#${id}`);
+  const observed = useActiveSection(ids);
+  const active = onHome ? observed : pathname.startsWith('/work') ? 'work' : null;
   const { scrollYProgress } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -53,7 +59,7 @@ export default function Navbar() {
         }`}
       >
         <nav className="container-page flex h-16 items-center justify-between gap-6" aria-label="Primary">
-          <a href="#top" className="group flex items-center gap-2.5 font-display text-[17px] font-semibold tracking-tight">
+          <a href={onHome ? '#top' : '/'} className="group flex items-center gap-2.5 font-display text-[17px] font-semibold tracking-tight">
             <span aria-hidden className="h-4 w-1 rounded-full bg-accent transition-transform duration-300 group-hover:scale-y-125" />
             {site.name}
           </a>
@@ -64,7 +70,7 @@ export default function Navbar() {
               return (
                 <li key={item.id} className="relative">
                   <a
-                    href={`#${item.id}`}
+                    href={to(item.id)}
                     aria-current={isActive ? 'location' : undefined}
                     className={`block py-2 text-sm transition-colors duration-200 ${
                       isActive ? 'text-ink' : 'text-muted hover:text-ink'
@@ -164,7 +170,7 @@ export default function Navbar() {
                     transition={{ delay: 0.1 + i * 0.04, duration: 0.35, ease }}
                   >
                     <a
-                      href={`#${item.id}`}
+                      href={to(item.id)}
                       onClick={() => setOpen(false)}
                       className={`flex items-baseline justify-between py-4 font-display text-2xl transition-colors ${
                         active === item.id ? 'text-accent' : 'text-ink hover:text-accent'
@@ -179,7 +185,7 @@ export default function Navbar() {
 
               <div className="mt-auto space-y-5 pt-8">
                 <a
-                  href="#contact"
+                  href={to('contact')}
                   onClick={() => setOpen(false)}
                   className="flex items-center justify-center gap-2 rounded-md bg-accent py-3.5 text-sm font-medium text-on-accent transition-transform active:scale-[0.98]"
                 >
