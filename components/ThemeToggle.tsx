@@ -10,11 +10,8 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
     const root = document.documentElement;
     const next = root.classList.contains('dark') ? 'light' : 'dark';
     root.classList.toggle('dark', next === 'dark');
-    haptic();
-    // Keep the mobile browser bar in step with the page.
-    document
-      .querySelectorAll('meta[name="theme-color"]')
-      .forEach((m) => m.setAttribute('content', next === 'dark' ? '#0b0f0e' : '#f7f7f3'));
+    haptic(); // browser-bar color follows via <ThemeColorSync />
+
     try {
       localStorage.setItem('theme', next);
     } catch {
